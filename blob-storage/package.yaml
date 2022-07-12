@@ -1,0 +1,30 @@
+name: blob-storage
+version: 0.1.0.0
+github: "githubuser/blob-storage"
+license: BSD3
+author: "Author name here"
+maintainer: "example@example.com"
+copyright: "2022 Author name here"
+
+description: Please see the README on GitHub at <https://github.com/githubuser/blob-storage#readme>
+
+dependencies:
+  - base >= 4.7 && < 5
+  - lens
+  - transformers
+  - mtl
+  - template-haskell
+  - text
+  - containers
+  - bytestring
+  - uuid
+  - http-types
+
+library:
+  source-dirs: src
+  default-extensions:
+    - ConstraintKinds
+    - TemplateHaskell
+    - FlexibleInstances
+    - OverloadedStrings
+    - GeneralizedNewtypeDeriving

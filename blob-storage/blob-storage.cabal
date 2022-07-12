@@ -1,0 +1,74 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.34.4.
+--
+-- see: https://github.com/sol/hpack
+
+name:           blob-storage
+version:        0.1.0.0
+description:    Please see the README on GitHub at <https://github.com/githubuser/blob-storage#readme>
+homepage:       https://github.com/githubuser/blob-storage#readme
+bug-reports:    https://github.com/githubuser/blob-storage/issues
+author:         Author name here
+maintainer:     example@example.com
+copyright:      2022 Author name here
+license:        BSD3
+build-type:     Simple
+
+source-repository head
+  type: git
+  location: https://github.com/githubuser/blob-storage
+
+library
+  exposed-modules:
+      Blob.Abstractions.Auth
+      Blob.Abstractions.Decode
+      Blob.Abstractions.Http
+      Blob.Core
+      Blob.Core.BlobDB
+      Blob.Core.Blobs
+      Blob.Core.Containers
+      Blob.Core.Derivations
+      Blob.Core.Shared
+      Blob.Data
+      Blob.Data.Blob
+      Blob.Data.Blob.AccessLevel
+      Blob.Data.Blob.Blob
+      Blob.Data.Blob.BlobContent
+      Blob.Data.Blob.BlobContext
+      Blob.Data.Blob.Container
+      Blob.Data.Blob.ContainerProperties
+      Blob.Data.Blob.Error
+      Blob.Data.Blob.LeaseCommand
+      Blob.Data.Blob.LeaseDuration
+      Blob.Data.Blob.LeaseId
+      Blob.Data.Blob.LeaseState
+      Blob.Data.Blob.LeaseStatus
+      Blob.Data.Http
+      Blob.Data.Http.Header
+      Blob.Data.Http.Method
+      Blob.Data.Http.Param
+      Blob.Data.Http.Request
+      Blob.Data.Http.Response
+  other-modules:
+      Paths_blob_storage
+  hs-source-dirs:
+      src
+  default-extensions:
+      ConstraintKinds
+      TemplateHaskell
+      FlexibleInstances
+      OverloadedStrings
+      GeneralizedNewtypeDeriving
+  build-depends:
+      base >=4.7 && <5
+    , bytestring
+    , containers
+    , http-types
+    , lens
+    , mtl
+    , template-haskell
+    , text
+    , transformers
+    , uuid
+  default-language: Haskell2010

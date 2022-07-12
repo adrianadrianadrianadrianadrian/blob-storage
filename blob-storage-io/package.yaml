@@ -1,0 +1,34 @@
+name: blob-storage-io
+version: 0.1.0.0
+github: "githubuser/blob-storage-io"
+license: BSD3
+author: "Author name here"
+maintainer: "example@example.com"
+copyright: "2022 Author name here"
+
+description: Please see the README on GitHub at <https://github.com/githubuser/blob-storage-io#readme>
+
+dependencies:
+  - base >= 4.7 && < 5
+  - text
+  - wreq
+  - http-types
+  - lens
+  - bytestring
+  - case-insensitive
+  - time
+  - cryptohash-sha256
+  - base64-bytestring
+  - containers
+  - mtl
+  - string-interpolate
+  - xml-conduit
+  - xml-lens
+  - blob-storage
+
+library:
+  source-dirs: src
+  default-extensions:
+    - LambdaCase
+    - OverloadedStrings
+    - QuasiQuotes

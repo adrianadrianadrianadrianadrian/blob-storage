@@ -1,0 +1,28 @@
+name:                example
+version:             0.1.0.0
+github:              "githubuser/example"
+license:             BSD3
+author:              "Author name here"
+maintainer:          "example@example.com"
+copyright:           "2022 Author name here"
+
+description:         Please see the README on GitHub at <https://github.com/githubuser/example#readme>
+
+dependencies:
+- base >= 4.7 && < 5
+- blob-storage
+- blob-storage-io
+- text
+- lens
+- mtl
+
+executables:
+  example-exe:
+    main:                Main.hs
+    source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    default-extensions:
+    - OverloadedStrings
