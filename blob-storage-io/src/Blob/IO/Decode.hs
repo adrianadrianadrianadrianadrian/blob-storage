@@ -2,55 +2,115 @@ module Blob.IO.Decode where
 
 import           Blob.Abstractions.Decode
 import           Blob.Data.Blob
+import           Blob.Data.Blob.ContainerProperties
 import           Blob.Data.Http
 import           Control.Exception
 import           Control.Lens
 import qualified Data.ByteString               as BS
 import qualified Data.CaseInsensitive          as CI
+import           Data.Map                      as Map
 import           Data.Maybe
 import           Data.String.Interpolate
 import qualified Data.Text                     as T
 import           Data.Text.Encoding
 import qualified Data.Text.Lazy                as TL
+import           GHC.Exception
 import qualified Network.HTTP.Types            as ExternalHttp
+import           Text.Read
 import           Text.XML
 import qualified Text.XML.Lens                 as XML
 
 instance Decode IO where
-    containers = pureOrThrowIO parseContainers
-    blobError  = pureOrThrowIO parseError
-    blobs      = pureOrThrowIO parseBlobs
+    containers  = pureOrThrowIO parseContainers
+    blobError   = pureOrThrowIO parseError
+    blobs       = pureOrThrowIO parseBlobs
+    blobContent = pure . view body
 
 pureOrThrowIO :: (BS.ByteString -> Either SomeException a) -> Response -> IO a
-pureOrThrowIO f r = either throwIO pure $ f . fromMaybe mempty $ r ^. body
+pureOrThrowIO parse r = either throwIO pure $ parse . fromMaybe mempty $ r ^. body
 
-parseBlobs :: BS.ByteString -> Either SomeException [Blob]
-parseBlobs = undefined
+errorWhileParsing :: BS.ByteString -> Either SomeException a
+errorWhileParsing = Left . errorCallException . ("Error parsing: " <>) . show
 
 parseContainers :: BS.ByteString -> Either SomeException [Container]
 parseContainers bs = do
-    doc <- parseText def raw
+    doc <- parseText def . decodeStrictUtf8 $ bs
     let containers =
             XML.root
                 .   XML.named "EnumerationResults"
                 ... XML.named "Containers"
                 ... XML.named "Container"
-    let t = doc ^.. containers
-    pure $ parseContainerElement <$> t
-    where raw = decodeStrictUtf8 bs
+    let maybeContainers =
+            sequence $ parseContainerElement <$> doc ^.. containers
+    maybe (errorWhileParsing bs) Right maybeContainers
 
-parseContainerElement :: Element -> Container
-parseContainerElement el = Container (el ^. field "Name")
-                                     (el ^. field "Version")
-                                     (el ^. field "Deleted")
-    where field name = XML.named "Container" ... XML.named name . XML.text
+parseContainerElement :: Element -> Maybe Container
+parseContainerElement el = do
+    props <- parseContainerProperties el
+    pure Container { _name       = field "Name"
+                   , _properties = props
+                   }
+  where
+    field name = el ^. XML.named "Container" ... XML.named name . XML.text
+
+parseContainerProperties :: Element -> Maybe ContainerProperties
+parseContainerProperties el = do
+    leaseStatus     <- maybeLeaseStatus . properties $ "LeaseStatus"
+    leaseState      <- maybeLeaseState . properties $ "LeaseState"
+    publicAccess    <- maybeAccesslevel . properties $ "PublicAccess"
+
+    pure $ ContainerProperties
+        { _etag                   = properties "Etag"
+        , _leaseStatus            = leaseStatus
+        , _leaseState             = leaseState
+        , _leaseDuration          = maybeProperties "LeaseDuration" >>= maybeLeaseDuration
+        , _publicAccess           = publicAccess
+        , _hasImmutabilityPolicy  = "true" == (T.toLower . properties $ "HasImmutabilityPolicy")
+        , _hasLegalHold           = "true" == (T.toLower . properties $ "HasLegalHold")
+        , _lastModified           = properties "Last-Modified"
+        }
+  where
+    properties name = el ^. scope name
+    maybeProperties name = el ^? scope name
+    scope name = XML.named "Container" ... XML.named "Properties" ... XML.named name . XML.text
+
+parseBlobs :: BS.ByteString -> Either SomeException [Blob]
+parseBlobs bs = do
+    doc <- parseText def . decodeStrictUtf8 $ bs
+    let blobs =
+            XML.root
+                .   XML.named "EnumerationResults"
+                ... XML.named "Blobs"
+                ... XML.named "Blob"
+    let maybeBlobs =
+            sequence $ parseBlobElement <$> doc ^.. blobs
+    maybe (errorWhileParsing bs) Right maybeBlobs
+
+parseBlobElement :: Element -> Maybe Blob
+parseBlobElement el = do
+    props <- parseBlobProperties el
+    pure Blob { _blobName       = field "Name"
+              , _blobProperties = props
+              }
+  where
+    field name = el ^. XML.named "Blob" ... XML.named name . XML.text
+
+parseBlobProperties :: Element -> Maybe BlobProperties
+parseBlobProperties el = do
+    byteLenth <- readMaybe . T.unpack . prop $ "Content-Length"
+    pure BlobProperties { _contentType = prop "Content-Type"
+                        , _contentByteLength = byteLenth
+                        }
+    where
+        prop name = el ^. XML.named "Blob" ... XML.named "Properties" ... XML.named name . XML.text
 
 parseError :: BS.ByteString -> Either SomeException Error
 parseError bs = do
-    doc <- parseText def raw
-    pure $ Error (doc ^. errorField "Code") (doc ^. errorField "Message")
+    doc <- parseText def . decodeStrictUtf8 $ bs
+    pure $ Error { _code    = doc ^. errorField "Code"
+                 , _message = doc ^. errorField "Message"
+                 }
   where
-    raw = decodeStrictUtf8 bs
     errorField name =
         XML.root . XML.named "Error" ... XML.named name . XML.text
 
@@ -59,36 +119,3 @@ stripUtf8Bom bs = fromMaybe bs (BS.stripPrefix "\239\187\191" bs)
 
 decodeStrictUtf8 :: BS.ByteString -> TL.Text
 decodeStrictUtf8 = TL.fromStrict . decodeUtf8 . stripUtf8Bom
-
-testContainer :: BS.ByteString
-testContainer = [__i|
-        <?xml version="1.0" encoding="utf-8"?>  
-        <EnumerationResults ServiceEndpoint="https://myaccount.blob.core.windows.net">  
-        <Prefix>string-value</Prefix>  
-        <Marker>string-value</Marker>  
-        <MaxResults>int-value</MaxResults>  
-        <Containers> 
-            <Container>  
-            <Name>container-name</Name>  
-            <Version>container-version</Version>
-            <Deleted>true</Deleted>
-            <Properties>  
-                <Last-Modified>date/time-value</Last-Modified>  
-                <Etag>etag</Etag>  
-                <LeaseStatus>locked | unlocked</LeaseStatus>  
-                <LeaseState>available | leased | expired | breaking | broken</LeaseState>  
-                <LeaseDuration>infinite | fixed</LeaseDuration> 
-                <PublicAccess>container | blob</PublicAccess>
-                <HasImmutabilityPolicy>true | false</HasImmutabilityPolicy>
-                <HasLegalHold>true | false</HasLegalHold>
-                <DeletedTime>datetime</DeletedTime>
-                <RemainingRetentionDays>no-of-days</RemainingRetentionDays>
-            </Properties>  
-            <Metadata>  
-                <metadata-name>value</metadata-name>  
-            </Metadata>  
-            </Container>  
-        </Containers>  
-        <NextMarker>marker-value</NextMarker>  
-        </EnumerationResults>  
-    |]

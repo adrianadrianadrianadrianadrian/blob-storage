@@ -36,6 +36,7 @@ library
       Blob.Data.Blob.Blob
       Blob.Data.Blob.BlobContent
       Blob.Data.Blob.BlobContext
+      Blob.Data.Blob.BlobProperties
       Blob.Data.Blob.Container
       Blob.Data.Blob.ContainerProperties
       Blob.Data.Blob.Error

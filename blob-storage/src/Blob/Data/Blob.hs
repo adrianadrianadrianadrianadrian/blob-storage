@@ -10,12 +10,14 @@ module Blob.Data.Blob
     , module Blob.Data.Blob.LeaseDuration
     , module Blob.Data.Blob.LeaseState
     , module Blob.Data.Blob.LeaseStatus
+    , module Blob.Data.Blob.BlobProperties
     ) where
 
 import           Blob.Data.Blob.AccessLevel
 import           Blob.Data.Blob.Blob
 import           Blob.Data.Blob.BlobContent
 import           Blob.Data.Blob.BlobContext
+import           Blob.Data.Blob.BlobProperties
 import           Blob.Data.Blob.Container
 import           Blob.Data.Blob.ContainerProperties
 import           Blob.Data.Blob.Error

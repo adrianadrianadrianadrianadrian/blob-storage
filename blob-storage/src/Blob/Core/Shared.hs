@@ -27,3 +27,6 @@ leaseIdFromResponse :: Response -> Maybe LeaseId
 leaseIdFromResponse res = maybeLeaseHeader >>= (readMaybe . T.unpack) . snd
   where 
     maybeLeaseHeader = findHeader "x-ms-lease-id" $ res ^. responseHeaders
+
+showText :: Show a => a -> T.Text
+showText = T.pack . show

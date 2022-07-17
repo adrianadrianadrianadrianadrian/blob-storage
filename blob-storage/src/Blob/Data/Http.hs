@@ -4,8 +4,7 @@ module Blob.Data.Http
   , module Blob.Data.Http.Request
   , module Blob.Data.Http.Method
   , module Blob.Data.Http.Param
-
-    -- defaults
+  
   , defaultGET
   , defaultPUT
   , urlFromRequest

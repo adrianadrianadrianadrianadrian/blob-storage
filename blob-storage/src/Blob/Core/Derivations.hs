@@ -15,9 +15,10 @@ instance Auth m => Auth (BlobDB m) where
     auth b r = lift $ auth b r
 
 instance Decode m => Decode (BlobDB m) where
-    containers = lift . containers
-    blobError  = lift . blobError
-    blobs      = lift . blobs
+    containers  = lift . containers
+    blobError   = lift . blobError
+    blobs       = lift . blobs
+    blobContent = lift . blobContent
 
 instance MonadTrans BlobDB where
     lift = BlobDB . lift . lift

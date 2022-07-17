@@ -12,21 +12,17 @@ import qualified Data.Text                     as T
 main :: IO ()
 main = do
     let context = defaultBlobContext "" ""
-    runBlobDB context $ do
+    firstBlobDetails <- runBlobDB context $ do
         containerName <- printFirstContainerName
-        printFirstBlobContents containerName
-    pure ()
+        blobs <- listBlobs containerName
+        let first = head blobs
+        let props = first ^. blobProperties
+        pure $ "Name: " <> first ^. blobName <> "\nBytes " <> (T.pack . show $ props ^. contentByteLength)
+    print firstBlobDetails
 
 printFirstContainerName :: BlobDB IO T.Text
 printFirstContainerName = do
     containers <- listContainers
     let containerName = head containers ^. name
-    lift $ print containerName
+    lift . print $ "First container: " <> containerName
     pure containerName
-
-printFirstBlobContents :: T.Text -> BlobDB IO ()
-printFirstBlobContents containerName = do
-    blobs <- listBlobs containerName
-    let firstBlobName = head blobs ^. blobName
-    content <- getBlob containerName firstBlobName
-    lift . print $ content
