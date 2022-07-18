@@ -44,7 +44,7 @@ leaseContainer containerName leaseCmd = do
     req <- auth ctx $ defaultPUT (blobDomain ctx) mempty
                     & params <>~ [("restype", "container"), ("comp", "lease")]
                     & path ?~ containerName
-                    & requestHeaders <>~ [ ("x-ms-lease-action", showText leaseCmd)
+                    & requestHeaders <>~ [ ("x-ms-lease-action", T.pack . show $ leaseCmd)
                                          , ("Content-Type", "application/octet-stream")
                                          ] <> leaseHeaders leaseCmd
     mkRequest req >>= validate <&> leaseIdFromResponse

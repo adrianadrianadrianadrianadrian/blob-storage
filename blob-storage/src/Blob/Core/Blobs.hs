@@ -43,7 +43,7 @@ putBlob containerName blobName blobContent = do
     ctx <- ask
     req <- auth ctx $ defaultPUT (blobDomain ctx) blobContent
                     & path ?~ containerName <> "/" <> blobName
-                    & requestHeaders <>~ [ ("Content-Length", showText . BS.length $ blobContent)
+                    & requestHeaders <>~ [ ("Content-Length", T.pack . show . BS.length $ blobContent)
                                          , ("x-ms-blob-type", "BlockBlob")
                                          , ("Content-Type", "application/octet-stream")
                                          ]
@@ -55,7 +55,7 @@ leaseBlob containerName blobName leaseCmd = do
     req <- auth ctx $ defaultPUT (blobDomain ctx) mempty
                     & params <>~ [("comp", "lease")]
                     & path ?~ containerName <> "/" <> blobName
-                    & requestHeaders <>~ [ ("x-ms-lease-action", showText leaseCmd)
+                    & requestHeaders <>~ [ ("x-ms-lease-action", T.pack . show $ leaseCmd)
                                          , ("Content-Type", "application/octet-stream")
                                          ] <> leaseHeaders leaseCmd
     mkRequest req >>= validate <&> leaseIdFromResponse
