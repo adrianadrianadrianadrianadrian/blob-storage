@@ -8,8 +8,8 @@ import           Blob.Data.Http
 import           Control.Lens
 import           Control.Monad.Except
 import qualified Data.Text                     as T
+import           Network.Mime
 import           Text.Read
-import Network.Mime
 
 validate :: (Decode m) => Response -> BlobDB m Response
 validate r = if isError r then blobError r >>= throwError else pure r
