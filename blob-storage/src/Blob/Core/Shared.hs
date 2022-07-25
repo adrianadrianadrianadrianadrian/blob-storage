@@ -9,6 +9,7 @@ import           Control.Lens
 import           Control.Monad.Except
 import qualified Data.Text                     as T
 import           Text.Read
+import Network.Mime
 
 validate :: (Decode m) => Response -> BlobDB m Response
 validate r = if isError r then blobError r >>= throwError else pure r
@@ -26,3 +27,6 @@ leaseHeader id = ("x-ms-lease-id", T.pack . show $ id)
 leaseIdFromResponse :: Response -> Maybe LeaseId
 leaseIdFromResponse res = maybeLeaseHeader >>= (readMaybe . T.unpack) . snd
   where maybeLeaseHeader = findHeader "x-ms-lease-id" $ res ^. responseHeaders
+
+inferContentType :: FileName -> T.Text 
+inferContentType = T.pack . show . defaultMimeLookup

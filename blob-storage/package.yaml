@@ -19,6 +19,7 @@ dependencies:
   - bytestring
   - uuid
   - http-types
+  - mime-types
 
 library:
   source-dirs: src

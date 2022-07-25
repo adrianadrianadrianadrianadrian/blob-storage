@@ -45,7 +45,7 @@ putBlob containerName blobName blobContent = do
                     & path ?~ containerName <> "/" <> blobName
                     & requestHeaders <>~ [ ("Content-Length", T.pack . show . BS.length $ blobContent)
                                          , ("x-ms-blob-type", "BlockBlob")
-                                         , ("Content-Type", "application/octet-stream")
+                                         , ("Content-Type", inferContentType blobName)
                                          ]
     mkRequest req >>= validate >> pure ()
 
@@ -56,7 +56,6 @@ leaseBlob containerName blobName leaseCmd = do
                     & params <>~ [("comp", "lease")]
                     & path ?~ containerName <> "/" <> blobName
                     & requestHeaders <>~ [ ("x-ms-lease-action", T.pack . show $ leaseCmd)
-                                         , ("Content-Type", "application/octet-stream")
+                                         , ("Content-Type", inferContentType blobName)
                                          ] <> leaseHeaders leaseCmd
     mkRequest req >>= validate <&> leaseIdFromResponse
-
