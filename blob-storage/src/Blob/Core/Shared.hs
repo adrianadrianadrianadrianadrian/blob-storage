@@ -1,7 +1,7 @@
 module Blob.Core.Shared where
 
 import           Blob.Abstractions.Decode
-import           Blob.Core.BlobDB
+import           Blob.Core.BlobStorageT
 import           Blob.Core.Derivations
 import           Blob.Data.Blob
 import           Blob.Data.Http
@@ -11,7 +11,7 @@ import qualified Data.Text                     as T
 import           Network.Mime
 import           Text.Read
 
-validate :: (Decode m) => Response -> BlobDB m Response
+validate :: (Decode m) => Response -> BlobStorageT m Response
 validate r = if isError r then blobError r >>= throwError else pure r
 
 leaseHeaders :: LeaseCommand -> [Header]

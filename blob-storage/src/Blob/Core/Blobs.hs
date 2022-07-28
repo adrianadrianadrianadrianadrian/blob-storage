@@ -3,7 +3,7 @@ module Blob.Core.Blobs where
 import           Blob.Abstractions.Auth
 import           Blob.Abstractions.Decode
 import           Blob.Abstractions.Http
-import           Blob.Core.BlobDB
+import           Blob.Core.BlobStorageT
 import           Blob.Core.Derivations
 import           Blob.Core.Shared
 import           Blob.Data.Blob
@@ -14,7 +14,7 @@ import           Control.Monad.Reader
 import qualified Data.ByteString               as BS
 import qualified Data.Text                     as T
 
-listBlobs :: Abstractions m => T.Text -> BlobDB m [Blob]
+listBlobs :: Abstractions m => T.Text -> BlobStorageT m [Blob]
 listBlobs containerName = do
     ctx <- ask
     req <- auth ctx $ defaultGET (blobDomain ctx)
@@ -23,7 +23,7 @@ listBlobs containerName = do
     res <- mkRequest req >>= validate
     blobs res
 
-getBlob :: Abstractions m => T.Text -> T.Text -> BlobDB m (Maybe BlobContent)
+getBlob :: Abstractions m => T.Text -> T.Text -> BlobStorageT m (Maybe BlobContent)
 getBlob containerName blobName = do
     ctx <- ask
     req <- auth ctx $ defaultGET (blobDomain ctx)
@@ -31,14 +31,14 @@ getBlob containerName blobName = do
     res <- mkRequest req >>= validate
     blobContent res
 
-deleteBlob :: Abstractions m => T.Text -> T.Text -> BlobDB m ()
+deleteBlob :: Abstractions m => T.Text -> T.Text -> BlobStorageT m ()
 deleteBlob containerName blobName = do
     ctx <- ask
     req <- auth ctx $ defaultDELETE (blobDomain ctx)
                     & path ?~ containerName <> "/" <> blobName
     mkRequest req >>= validate >> pure ()
 
-putBlob :: Abstractions m => T.Text -> T.Text -> BS.ByteString -> BlobDB m ()
+putBlob :: Abstractions m => T.Text -> T.Text -> BS.ByteString -> BlobStorageT m ()
 putBlob containerName blobName blobContent = do
     ctx <- ask
     req <- auth ctx $ defaultPUT (blobDomain ctx) blobContent
@@ -49,7 +49,7 @@ putBlob containerName blobName blobContent = do
                                          ]
     mkRequest req >>= validate >> pure ()
 
-leaseBlob :: Abstractions m => T.Text -> T.Text -> LeaseCommand -> BlobDB m (Maybe LeaseId)
+leaseBlob :: Abstractions m => T.Text -> T.Text -> LeaseCommand -> BlobStorageT m (Maybe LeaseId)
 leaseBlob containerName blobName leaseCmd = do
     ctx <- ask
     req <- auth ctx $ defaultPUT (blobDomain ctx) mempty

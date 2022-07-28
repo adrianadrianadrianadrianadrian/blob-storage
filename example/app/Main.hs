@@ -12,7 +12,7 @@ import qualified Data.Text                     as T
 main :: IO ()
 main = do
     let context = defaultBlobContext "" ""
-    firstBlobDetails <- runBlobDB context $ do
+    firstBlobDetails <- runBlobStorage context $ do
         containerName <- printFirstContainerName
         blobs <- listBlobs containerName
         let first = head blobs
@@ -20,7 +20,7 @@ main = do
         pure $ "Name: " <> first ^. blobName <> "\nBytes " <> (T.pack . show $ props ^. contentByteLength)
     print firstBlobDetails
 
-printFirstContainerName :: BlobDB IO T.Text
+printFirstContainerName :: BlobStorage T.Text
 printFirstContainerName = do
     containers <- listContainers
     let containerName = head containers ^. name

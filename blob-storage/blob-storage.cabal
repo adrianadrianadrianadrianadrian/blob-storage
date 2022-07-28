@@ -25,8 +25,8 @@ library
       Blob.Abstractions.Decode
       Blob.Abstractions.Http
       Blob.Core
-      Blob.Core.BlobDB
       Blob.Core.Blobs
+      Blob.Core.BlobStorageT
       Blob.Core.Containers
       Blob.Core.Derivations
       Blob.Core.Shared
