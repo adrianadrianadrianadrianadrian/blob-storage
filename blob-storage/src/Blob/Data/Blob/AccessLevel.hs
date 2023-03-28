@@ -5,6 +5,7 @@ import           Data.Text
 data AccessLevel
     = ContainerLevel
     | BlobLevel
+    | Private
     deriving Show
 
 maybeAccesslevel :: Text -> Maybe AccessLevel

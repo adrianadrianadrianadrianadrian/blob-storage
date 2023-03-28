@@ -57,14 +57,13 @@ parseContainerProperties :: Element -> Maybe ContainerProperties
 parseContainerProperties el = do
     leaseStatus     <- maybeLeaseStatus . properties $ "LeaseStatus"
     leaseState      <- maybeLeaseState . properties $ "LeaseState"
-    publicAccess    <- maybeAccesslevel . properties $ "PublicAccess"
 
     pure $ ContainerProperties
         { _etag                   = properties "Etag"
         , _leaseStatus            = leaseStatus
         , _leaseState             = leaseState
         , _leaseDuration          = maybeProperties "LeaseDuration" >>= maybeLeaseDuration
-        , _publicAccess           = publicAccess
+        , _publicAccess           = fromMaybe Private (maybeAccesslevel . properties $ "PublicAccess")
         , _hasImmutabilityPolicy  = "true" == (T.toLower . properties $ "HasImmutabilityPolicy")
         , _hasLegalHold           = "true" == (T.toLower . properties $ "HasLegalHold")
         , _lastModified           = properties "Last-Modified"
