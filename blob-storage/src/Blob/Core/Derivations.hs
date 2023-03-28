@@ -22,3 +22,6 @@ instance Decode m => Decode (BlobStorageT m) where
 
 instance MonadTrans BlobStorageT where
     lift = BlobStorageT . lift . lift
+
+withIO :: IO a -> BlobStorageT IO a
+withIO = lift

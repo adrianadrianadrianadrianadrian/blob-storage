@@ -1,6 +1,6 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.34.4.
+-- This file has been generated from package.yaml by hpack version 0.35.1.
 --
 -- see: https://github.com/sol/hpack
 
@@ -33,6 +33,5 @@ executable example-exe
     , blob-storage
     , blob-storage-io
     , lens
-    , mtl
     , text
   default-language: Haskell2010
