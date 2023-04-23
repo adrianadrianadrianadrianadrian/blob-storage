@@ -1,23 +1,23 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.34.4.
+-- This file has been generated from package.yaml by hpack version 0.35.1.
 --
 -- see: https://github.com/sol/hpack
 
 name:           blob-storage
 version:        0.1.0.0
-description:    Please see the README on GitHub at <https://github.com/githubuser/blob-storage#readme>
-homepage:       https://github.com/githubuser/blob-storage#readme
-bug-reports:    https://github.com/githubuser/blob-storage/issues
-author:         Author name here
-maintainer:     example@example.com
-copyright:      2022 Author name here
+description:    A package that provides the core functionality of Azure blob storage.
+homepage:       https://github.com/adrianadrianadrianadrianadrian/blob-storage#readme
+bug-reports:    https://github.com/adrianadrianadrianadrianadrian/blob-storage/issues
+author:         Adrian Glouftsis
+maintainer:     a.glouftsis@outlook.com
+copyright:      2023 Adrian Glouftsis
 license:        BSD3
 build-type:     Simple
 
 source-repository head
   type: git
-  location: https://github.com/githubuser/blob-storage
+  location: https://github.com/adrianadrianadrianadrianadrian/blob-storage
 
 library
   exposed-modules:

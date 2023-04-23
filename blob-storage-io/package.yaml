@@ -1,12 +1,12 @@
 name: blob-storage-io
 version: 0.1.0.0
-github: "githubuser/blob-storage-io"
+github: "adrianadrianadrianadrianadrian/blob-storage"
 license: BSD3
-author: "Author name here"
-maintainer: "example@example.com"
-copyright: "2022 Author name here"
+author: "Adrian Glouftsis"
+maintainer: "a.glouftsis@outlook.com"
+copyright: "2023 Adrian Glouftsis"
 
-description: Please see the README on GitHub at <https://github.com/githubuser/blob-storage-io#readme>
+description: A package that provides an IO implementation for the 'blob-storage' core package.
 
 dependencies:
   - base >= 4.7 && < 5
