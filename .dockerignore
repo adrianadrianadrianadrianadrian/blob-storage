@@ -1,0 +1,4 @@
+**/*.hs
+**/*.stack-work
+**/*.dist-newstyle
+example

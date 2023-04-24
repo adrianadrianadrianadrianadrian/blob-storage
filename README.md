@@ -1,5 +1,7 @@
 # WIP - Azure Blob Storage
 
+![build workflow](https://github.com/adrianadrianadrianadrianadrian/blob-storage/actions/workflows/build.yaml/badge.svg)
+
 Operations currently supported:
 - list containers
 - create container

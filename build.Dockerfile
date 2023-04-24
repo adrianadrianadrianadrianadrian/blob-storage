@@ -1,11 +1,10 @@
 FROM haskell:8.10.7
 
-COPY . . 
+COPY blob-storage blob-storage
+COPY blob-storage-io blob-storage-io
 
 RUN cd blob-storage \
-    && stack build \ 
-    && stack sdist --tar-dir .
-
+    && stack build --only-dependencies
+    
 RUN cd blob-storage-io \
-    && stack build \
-    && stack sdist --tar-dir .
+    && stack build --only-dependencies
