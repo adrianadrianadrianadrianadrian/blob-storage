@@ -30,7 +30,7 @@ jobs:
           sed '/**\/*.hs/d' ./.dockerignore > tmp && mv tmp .dockerignore
 
           docker build \
-            -f dist.Dockerfile \
+            -f Dockerfile \
             -t adriang123/blob-storage \
             -t adriang123/blob-storage:"$BUILD_ID" \
             --build-arg BUILDIMAGE=adriang123/blob-storage-build .
@@ -40,7 +40,7 @@ jobs:
       - name: Upload Library
         if: github.ref == 'refs/heads/master'
         run: |
-          HACKAGE_KEY=${{ secrets.HACKAGE_KEY }} docker run -t adriang123/blob-storage \
-            sh -c 'cd blob-storage && stack upload . \
-              && cd .. \
-              && cd blob-storage-io && stack upload .'
+          # HACKAGE_KEY=${{ secrets.HACKAGE_KEY }} docker run -t adriang123/blob-storage \
+          #   sh -c 'cd blob-storage && stack upload . \
+          #     && cd .. \
+          #     && cd blob-storage-io && stack upload .'
