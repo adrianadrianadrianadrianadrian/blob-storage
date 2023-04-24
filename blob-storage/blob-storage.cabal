@@ -5,7 +5,7 @@ cabal-version: 1.12
 -- see: https://github.com/sol/hpack
 
 name:           blob-storage
-version:        0.1.0.0
+version:        0.1.0
 description:    A package that provides the core functionality of Azure blob storage.
 homepage:       https://github.com/adrianadrianadrianadrianadrian/blob-storage#readme
 bug-reports:    https://github.com/adrianadrianadrianadrianadrian/blob-storage/issues
