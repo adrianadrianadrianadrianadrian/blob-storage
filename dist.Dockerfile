@@ -15,5 +15,3 @@ RUN cd blob-storage-io \
 FROM alpine AS runtime
 COPY --from=deps /blob-storage/.stack-work/dist .
 COPY --from=deps /blob-storage-io/.stack-work/dist .
-
-# sed '/**\/*.hs/d' ./.dockerignore > tmp && mv tmp .dockerignore
