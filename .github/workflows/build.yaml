@@ -32,3 +32,8 @@ jobs:
             --build-arg BUILDIMAGE=adriang123/blob-storage-build .
 
           docker push adriang123/blob-storage:"$BUILD_ID"
+
+          HACKAGE_KEY=${{ secrets.HACKAGE_KEY }} docker run -t adriang123/blob-storage \
+            sh -c 'cd blob-storage && stack upload . \
+              && cd .. \
+              && cd blob-storage-io && stack upload .'
