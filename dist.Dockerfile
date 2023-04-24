@@ -6,12 +6,11 @@ COPY blob-storage-io blob-storage-io
 
 RUN cd blob-storage \
     && stack build \
-    && stack sdist --tar-dir .
+    && stack sdist --tar-dir /dists
 
 RUN cd blob-storage-io \
     && stack build \
-    && stack sdist --tar-dir .
+    && stack sdist --tar-dir /dists
 
 FROM alpine AS runtime
-COPY --from=deps /blob-storage/.stack-work/dist .
-COPY --from=deps /blob-storage-io/.stack-work/dist .
+COPY --from=deps /dists /dists
