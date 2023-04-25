@@ -19,5 +19,5 @@ spec = do
       forAll (excludeInt (-1)) $
         \x -> B.maybeLeaseDuration (pack . show $ x) == Just (B.Fixed x)
     it "should return 'Nothing'" $ do
-      forAll nonNumericString $
+      forAll nonIntString $
         \i -> B.maybeLeaseDuration (pack i) `shouldBe` Nothing
