@@ -17,9 +17,22 @@ spec = do
       let matchingHeader = ("key", "value")
       let headers = [matchingHeader, ("key2", "value2")]
       H.findHeader "key" headers `shouldBe` Just matchingHeader
+    it "findHeader return Nothing when no matching header found" $ forAll keyAndHeaders $
+      \(k, headers) -> isNothing $ H.findHeader (pack k) headers
 
   describe "Param" $ do
     it "queryString is correctly formed" $ do
       H.queryString [("k", "v")] `shouldBe` "?k=v"
       H.queryString [("k", "v"), ("k2", "v2")] `shouldBe` "?k=v&k2=v2"
       H.queryString [] `shouldBe` ""
+
+keyAndHeaders :: Gen (String, [H.Header])
+keyAndHeaders = do
+  k <- arbitrary :: Gen String
+  headers <- listOf (headerGen `suchThat` ((/= pack k) . fst))
+  pure (k, headers)
+  where
+    headerGen = do
+      k <- (arbitrary :: Gen String)
+      v <- (arbitrary :: Gen String)
+      pure (pack k, pack v)
