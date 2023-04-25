@@ -29,3 +29,10 @@ library:
     - FlexibleInstances
     - OverloadedStrings
     - GeneralizedNewtypeDeriving
+  
+tests:
+  spec:
+    defaults: hspec/hspec@main
+    dependencies: 
+      - blob-storage
+      - QuickCheck

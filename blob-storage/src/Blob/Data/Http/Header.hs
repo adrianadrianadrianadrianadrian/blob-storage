@@ -1,7 +1,7 @@
 module Blob.Data.Http.Header where
 
-import qualified Data.List                     as List
-import qualified Data.Text                     as T
+import qualified Data.List as List
+import qualified Data.Text as T
 
 type Header = (T.Text, T.Text)
 

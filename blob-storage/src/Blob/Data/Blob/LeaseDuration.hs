@@ -6,7 +6,7 @@ import           Text.Read
 data LeaseDuration
     = Infinite
     | Fixed Int
-    deriving Show
+    deriving (Show, Eq)
 
 maybeLeaseDuration :: Text -> Maybe LeaseDuration
 maybeLeaseDuration input = (readMaybe . unpack $ input) >>= \duration ->

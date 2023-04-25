@@ -74,3 +74,31 @@ library
     , transformers
     , uuid
   default-language: Haskell2010
+
+test-suite spec
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      Data.BlobSpec
+      Data.HttpSpec
+      Generators
+      Paths_blob_storage
+  hs-source-dirs:
+      test
+  build-depends:
+      QuickCheck
+    , base >=4.7 && <5
+    , blob-storage
+    , bytestring
+    , containers
+    , hspec ==2.*
+    , http-types
+    , lens
+    , mime-types
+    , mtl
+    , template-haskell
+    , text
+    , transformers
+    , uuid
+  default-language: Haskell2010
+  build-tool-depends: hspec-discover:hspec-discover == 2.*

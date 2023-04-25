@@ -8,14 +8,14 @@ import           Control.Lens
 import           Data.Text
 
 data ContainerProperties = ContainerProperties
-    { _etag                   :: Text
-    , _leaseStatus            :: LeaseStatus
-    , _leaseState             :: LeaseState
-    , _leaseDuration          :: Maybe LeaseDuration
-    , _publicAccess           :: AccessLevel
-    , _hasImmutabilityPolicy  :: Bool
-    , _hasLegalHold           :: Bool
-    , _lastModified           :: Text
+    { _etag                  :: Text
+    , _leaseStatus           :: LeaseStatus
+    , _leaseState            :: LeaseState
+    , _leaseDuration         :: Maybe LeaseDuration
+    , _publicAccess          :: AccessLevel
+    , _hasImmutabilityPolicy :: Bool
+    , _hasLegalHold          :: Bool
+    , _lastModified          :: Text
     }
     deriving Show
 

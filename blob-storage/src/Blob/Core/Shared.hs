@@ -7,7 +7,7 @@ import           Blob.Data.Blob
 import           Blob.Data.Http
 import           Control.Lens
 import           Control.Monad.Except
-import qualified Data.Text                     as T
+import qualified Data.Text                as T
 import           Network.Mime
 import           Text.Read
 
@@ -28,5 +28,5 @@ leaseIdFromResponse :: Response -> Maybe LeaseId
 leaseIdFromResponse res = maybeLeaseHeader >>= (readMaybe . T.unpack) . snd
   where maybeLeaseHeader = findHeader "x-ms-lease-id" $ res ^. responseHeaders
 
-inferContentType :: FileName -> T.Text 
+inferContentType :: FileName -> T.Text
 inferContentType = T.pack . show . defaultMimeLookup

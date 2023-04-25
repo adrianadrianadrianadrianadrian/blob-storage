@@ -11,8 +11,8 @@ import           Blob.Data.Http
 import           Control.Lens
 import           Control.Monad.Except
 import           Control.Monad.Reader
-import qualified Data.ByteString               as BS
-import qualified Data.Text                     as T
+import qualified Data.ByteString          as BS
+import qualified Data.Text                as T
 
 listBlobs :: Abstractions m => T.Text -> BlobStorageT m [Blob]
 listBlobs containerName = do
