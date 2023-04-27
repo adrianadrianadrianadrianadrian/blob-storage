@@ -11,7 +11,7 @@ import           Blob.Data.Http
 import           Control.Lens
 import           Control.Monad.Except
 import           Control.Monad.Reader
-import qualified Data.Text                     as T
+import qualified Data.Text                as T
 
 listContainers :: Abstractions m => BlobStorageT m [Container]
 listContainers = do
@@ -24,7 +24,7 @@ listContainers = do
 createContainer :: Abstractions m => T.Text -> BlobStorageT m ()
 createContainer containerName = do
     ctx <- ask
-    req <- auth ctx $ defaultPUT (blobDomain ctx) mempty 
+    req <- auth ctx $ defaultPUT (blobDomain ctx) mempty
                     & params <>~ [("restype", "container")]
                     & path ?~ containerName
                     & requestHeaders <>~ [("Content-Type", "application/octet-stream")]
@@ -33,7 +33,7 @@ createContainer containerName = do
 deleteContainer :: Abstractions m => T.Text -> BlobStorageT m ()
 deleteContainer containerName = do
     ctx <- ask
-    req <- auth ctx $ defaultDELETE (blobDomain ctx) 
+    req <- auth ctx $ defaultDELETE (blobDomain ctx)
                     & params <>~ [("restype", "container")]
                     & path ?~ containerName
     mkRequest req >>= validate >> pure ()

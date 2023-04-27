@@ -1,10 +1,10 @@
 module Blob.Data.Http.Request where
 
-import           Control.Lens
-import           Data.ByteString
 import           Blob.Data.Http.Header
 import           Blob.Data.Http.Method
 import           Blob.Data.Http.Param
+import           Control.Lens
+import           Data.ByteString
 import           Data.Text
 
 data Request = Request

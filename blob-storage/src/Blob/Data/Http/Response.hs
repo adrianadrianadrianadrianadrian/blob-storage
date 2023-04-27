@@ -1,9 +1,9 @@
 module Blob.Data.Http.Response where
 
+import           Blob.Data.Http.Header
 import           Control.Lens
 import           Data.ByteString
-import           Blob.Data.Http.Header
-import qualified Network.HTTP.Types            as ExternalHttp
+import qualified Network.HTTP.Types    as ExternalHttp
 
 data Response = Response
     { _responseHeaders :: [Header]

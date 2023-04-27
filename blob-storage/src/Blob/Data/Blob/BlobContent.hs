@@ -1,5 +1,5 @@
 module Blob.Data.Blob.BlobContent where
 
-import Data.ByteString
+import           Data.ByteString
 
 type BlobContent = ByteString
